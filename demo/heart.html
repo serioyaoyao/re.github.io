@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跳动的心</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .heart {
+        background-color: red;
+        height: 200px;
+        width: 200px;
+        position: relative;
+        animation: heartBeat 2s ease-in 1s infinite;
+        transform: rotate(45deg) scale(0.5);
+        box-shadow: 0 0 100px red;
+      }
+      .heart::before {
+        content: "";
+        position: absolute;
+        top: -99px;
+        right: 0;
+        width: 200px;
+        height: 100px;
+        background-color: red;
+        border-radius: 100px 100px 0 0;
+      }
+      .heart::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -99px;
+        width: 100px;
+        height: 200px;
+        background-color: red;
+        border-radius: 100px 0 0 100px;
+      }
+      @keyframes heartBeat {
+        0% {
+          transform: rotate(45deg) scale(0.5);
+        }
+        100% {
+          transform: rotate(45deg) scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="heart"></div>
+  </body>
+</html>

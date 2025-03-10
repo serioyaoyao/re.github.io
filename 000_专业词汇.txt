@@ -1,0 +1,10 @@
+<!DOCTYPE html> 避免浏览器的怪异模式
+
+html5基本骨架：
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body></body>
+</html>
+
+charset="UTF-8"  字符编码（UTF-8 gbk）

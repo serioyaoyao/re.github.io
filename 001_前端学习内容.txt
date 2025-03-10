@@ -1,0 +1,124 @@
+计划：
+刷视频课程（b站，慕课网，找百度网盘），看文档、博客
+根据招聘要求学习内容
+1.基础内容
+2.源码
+3.调试工具
+4.写项目、插件
+
+项目：
+*哪吒动画
+
+以下是一些优质的前端学习网站，适合不同阶段的学习者，涵盖基础入门、实战练习、进阶提升等内容：
+
+---
+
+### **一、基础入门 & 文档类**
+1. **MDN Web Docs**  
+   - 网址：[MDN Web Docs](https://developer.mozilla.org/zh-CN/)  
+   - **权威的 Web 开发文档**，涵盖 HTML、CSS、JavaScript 的详细教程和 API 参考，适合随时查阅。
+
+2. **W3School**  
+   - 网址：[W3School](https://www.w3school.com.cn/)  
+   - 适合初学者的入门教程，提供简单的代码示例和在线练习环境。
+
+3. **FreeCodeCamp（中文版）**  
+   - 网址：[FreeCodeCamp 中文](https://chinese.freecodecamp.org/)  
+   - **免费交互式编程课程**，通过实战项目学习 HTML、CSS、JavaScript 等，适合零基础。
+
+4. **菜鸟教程**  
+   - 网址：[菜鸟教程](https://www.runoob.com/)  
+   - 中文教程，涵盖前端三件套及各类框架，适合快速上手。
+
+---
+
+### **二、实战练习 & 项目**
+1. **CodePen**  
+   - 网址：[CodePen](https://codepen.io/)  
+   - 在线代码编辑器，可实时预览效果，学习他人优秀案例，分享自己的作品。
+
+2. **Frontend Mentor**  
+   - 网址：[Frontend Mentor](https://www.frontendmentor.io/)  
+   - **通过真实设计稿练习前端技能**，提供设计图和需求，完成项目并获取反馈。
+
+3. **JSFiddle**  
+   - 网址：[JSFiddle](https://jsfiddle.net/)  
+   - 轻量级在线代码调试工具，适合快速测试代码片段。
+
+4. **Codecademy**  
+   - 网址：[Codecademy](https://www.codecademy.com/)  
+   - 交互式编程学习平台，提供前端系统课程（部分内容需付费）。
+
+---
+
+### **三、框架 & 工具**
+1. **Vue.js 官方文档**  
+   - 网址：[Vue.js](https://cn.vuejs.org/)  
+   - 学习 Vue.js 的权威指南，中文文档友好。
+
+2. **React 官方文档**  
+   - 网址：[React](https://zh-hans.react.dev/)  
+   - React 官方教程，适合深入学习现代前端框架。
+
+3. **Webpack 中文文档**  
+   - 网址：[Webpack](https://webpack.docschina.org/)  
+   - 学习前端工程化必备工具。
+
+---
+
+### **四、进阶提升 & 社区**
+1. **CSS-Tricks**  
+   - 网址：[CSS-Tricks](https://css-tricks.com/)  
+   - 专注 CSS 技巧和现代前端技术的博客，内容深入且实用。
+
+2. **掘金**  
+   - 网址：[掘金](https://juejin.cn/)  
+   - 中文技术社区，大量前端优质文章和实战经验分享。
+
+3. **阮一峰的网络日志**  
+   - 网址：[阮一峰博客](https://www.ruanyifeng.com/blog/)  
+   - 知名技术博主，内容涵盖 JavaScript、ES6、Web 开发等。
+
+4. **Stack Overflow**  
+   - 网址：[Stack Overflow](https://stackoverflow.com/)  
+   - 全球开发者问答社区，解决编码难题的利器。
+
+---
+
+### **五、设计 & 交互**
+1. **Figma 学习**  
+   - 网址：[Figma 教程](https://www.figma.com/resources/learn/)  
+   - 学习 UI/UX 设计基础，提升前端与设计协作能力。
+
+2. **Dribbble**  
+   - 网址：[Dribbble](https://dribbble.com/)  
+   - 全球设计师社区，获取设计灵感和趋势。
+
+---
+
+### **六、算法 & 面试**
+1. **LeetCode**  
+   - 网址：[LeetCode](https://leetcode.cn/)  
+   - 刷算法题，备战前端面试中的编程环节。
+
+2. **前端面试题合集**  
+   - GitHub 仓库：[Front-End-Interview-Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions)
+
+---
+
+### **七、视频教程（中文）**
+1. **Bilibili（哔哩哔哩）**  
+   - 搜索关键词：**「尚硅谷前端」「黑马程序员」「技术胖」**，有免费系统课程。
+
+2. **慕课网**  
+   - 网址：[慕课网](https://www.imooc.com/)  
+   - 付费与免费课程结合，适合系统性学习。
+
+---
+
+### **学习建议**
+- **学习路线**：HTML/CSS → JavaScript → 框架（Vue/React）→ 工程化（Webpack/Vite）→ 算法/设计模式。
+- **多动手**：学完理论后，通过项目实战巩固知识（如仿站、开发个人博客）。
+- **参与开源**：GitHub 上参与前端项目，学习协作开发。
+
+希望这些资源能帮助你高效学习前端开发！ 🚀
