@@ -105,7 +105,10 @@
       if (rootDocument.scrollTop === 0) addTouchEvent();
 
       window.onscroll = function () {
-        if (rootDocument.scrollTop <= 0) addTouchEvent();
+        if (rootDocument.scrollTop <= 0) {
+          rootDocument.scrollTop = 0;
+          addTouchEvent();
+        }
       };
 
       let ox, oy, x, y, distant;
