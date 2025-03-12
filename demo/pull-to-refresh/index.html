@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>刷新与加载更多</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+      }
+      .top-tip {
+        position: fixed;
+        top: -30px;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        font-size: 13px;
+        color: #fff;
+        line-height: 30px;
+        text-align: center;
+        letter-spacing: 0.3px;
+        opacity: 0;
+        transition: all 0.3s;
+        background-color: rgba(0, 128, 0, 0.6);
+      }
+
+      .top-tip.show {
+        opacity: 1;
+        z-index: 10;
+        top: 0;
+      }
+      .main {
+        box-sizing: border-box;
+        padding: 0 10px;
+        width: 100%;
+        background: #f5f5f5;
+        position: relative;
+      }
+      .dot-box {
+        position: absolute;
+        top: -30px;
+        width: 100%;
+        height: 30px;
+        background-color: #fff;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: -5px;
+      }
+      .dot:last-child {
+        display: none;
+      }
+      .dot.loading {
+        display: unset;
+        animation: dot-move 1.5s infinite;
+      }
+      @keyframes dot-move {
+        0% {
+          transform: translateX(-20px);
+        }
+        33.33% {
+          transform: translateX(-20px);
+        }
+
+        33.34% {
+          transform: translateX(0px);
+        }
+        66.66% {
+          transform: translateX(0px);
+        }
+        66.67% {
+          transform: translateX(20px);
+        }
+        100% {
+          transform: translateX(20px);
+        }
+      }
+
+      .list-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .list-box .item {
+        display: inline-block;
+        width: calc(50% - 10px);
+        text-align: center;
+        letter-spacing: 0.5px;
+        margin-top: 15px;
+        border-radius: 5px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 0 5px #eee;
+      }
+
+      .list-box .item .img-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: calc(50vw - 10px);
+      }
+
+      .list-box .item .img-box img {
+        width: 100%;
+      }
+
+      .list-box .item .product-info .name {
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .list-box .item .product-info {
+        padding: 0 10px 12px;
+      }
+      .list-box .item .product-info .desc {
+        font-size: 12px;
+        color: #9e9e9e;
+        padding: 0 3px;
+        margin-top: 5px;
+      }
+
+      .list-box .item .product-info .price {
+        font-size: 18px;
+        font-weight: bold;
+        color: red;
+        margin-top: 5px;
+        text-align: right;
+        text-align: end;
+      }
+
+      .list-box .item .product-info .price::before {
+        content: "￥";
+        font-size: 14px;
+        margin-right: 1px;
+      }
+
+      .list-box .item .product-info .ellipsis {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .load-more {
+        text-align: center;
+        line-height: 20px;
+        padding: 15px 0 10px;
+        letter-spacing: 0.3px;
+        color: #9e9e9e;
+        font-size: 12px;
+      }
+      .load-more.loading::after {
+        display: inline-block;
+        content: "\e605";
+        font-family: iconfont;
+        font-size: 14px;
+        animation: icon-loading 1.3s infinite;
+      }
+
+      /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+      @font-face {
+        font-family: "iconfont"; /* Project id 4854779 */
+        src: url("data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAPcAAsAAAAACFgAAAOQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHFQGYACCcAqETINVATYCJAMICwYABCAFhGcHNxsYByMRNmsvEpL9IyE7ybyNZYxjp6kBDpYrW6531dRpMk28ieBrP3Tf3QUAFKJPVGLDMjpcEDKgqlpjq6s6HsgzCt35w+u9vVT5kLcCdljpQM0e6amYbnHOKRmhRnL25NEXUoIsx/+5Jt/CWuCDwDITD2yWQAOKShvh3kBpw9gFLfEdgUZL1qT1c1QSYJ2LphogU5iNQZIe5740H1C4Qmmghnpxbde1RdxTQ7qTXgLuBt+PfxyCQlKTmVnbh8FF4P7XGmtCvqguyO/1TVcFxyfUIGNuY6rYbzZsMo8Cc7LGKoOFEVReBD8tq8pjbPuPRxC1zNRmMAwZ18R0WJd6SQIFTXgEgDcIX/Zo6oAt4bNZQh5bzBB2Tp4AF4h5AI02cbL/FD01CSGE6K44FRdbPhEmgjA3HtlJwY8JUWgVIIKkdKwIWxOn9J8a5nNxnDbRrINSkvtE4cuiFGwPJhJJGAZh4hFoA2zJKCkg/KRWtBkk9OV0ycheP1k/vpR1lyQEaZ7AIogwWk+tI36tKk+Q3Hd84iQELeUQpqKgBZYmgCbvv+tdf4IzwoOz277A18OHdWn8vPdrmW9mO2sOr21nFoTq000Si3Rg0gFoQNCD5YoPFIQYwl0kgvDMteqja9/qepBnvBHNCO86t5QHvw78y/lSXLn4a29n5nbnlW/XTmFPG8vg3p7+WUhhvz8yFPlN8Z19dnjmeNvAP3UZr3PpR8dew33xPw+v1YQL4TuNUdbfrv3v/Frx3NTkgBb0+6ELMjbxyIse+O1s55s8TpluhCdjDakTfb64hgvDDSEFl6tzaDIlEX1oweGz+10lgKaLh2Qu22sfhtJUSNO3gweMYEJ1UeQL1N++IfiXwoOOqEWjcXH5DpWB5BGgvx5eo+WmYlo6fRxq6iLRhXrOhJDUGYKs3ghS8DNQo8kK1Kq3Co1mbWxu0uU2c1EaMOEaQGh3H5JWDyFr9wQp+FdQo9cvqNXuPzQ6lRLM/ehMUXggFIwa5A+8qsXYYg56vaJ9JUFl3ifS7qEblnHOhy9YkMZYsL/tymzAUM1wppdhShUa1YCKR8fctmkyVR8ZVc3DAUECQxqQfoCnVIXx0Dn7e1fIekkE6og8dWTHdNQ7WIzmDshFUDrV3cghuzdrxZgBDAKhDJy5DiU1UIFWPSpAChu5Ab5mM1lopqtgXF6UX20XNDKlKawjMuapF3/hLRarX3UYAA==")
+            format("woff2"),
+          url("//at.alicdn.com/t/c/font_4854779_k6zvztyp27o.woff?t=1741750924247")
+            format("woff"),
+          url("//at.alicdn.com/t/c/font_4854779_k6zvztyp27o.ttf?t=1741750924247")
+            format("truetype");
+      }
+
+      @keyframes icon-loading {
+        0% {
+          transform: rotateZ(0);
+        }
+        100% {
+          transform: rotateZ(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-tip"></div>
+    <div class="main">
+      <div class="dot-box">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="list-box"></div>
+      <div class="load-more">上滑加载更多</div>
+    </div>
+
+    <script src="data.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      const mainDom = document.getElementsByClassName("main")[0],
+        dots = document.getElementsByClassName("dot"),
+        rootDocument = document.documentElement,
+        loadMore = document.getElementsByClassName("load-more")[0];
+
+      // 判断文档是否处于顶部，如果处于顶部的话添加监听main元素的触摸事件
+      addTouchEvent();
+
+      window.onscroll = function () {
+        if (rootDocument.scrollTop <= 0) {
+          rootDocument.scrollTop = 0;
+          addTouchEvent();
+        } else {
+          removeTouchEvent();
+        }
+
+        // 触底 - 加载更多数据
+        if (
+          window.innerHeight + rootDocument.scrollTop + 2 >=
+          mainDom.clientHeight
+        ) {
+          if (
+            loadMore.innerHTML === "暂无更多数据" ||
+            /loading/.test(loadMore.className)
+          )
+            return;
+          loadMore.innerHTML = "";
+          loadMore.className = "load-more loading";
+          onLoadMore();
+        }
+      };
+
+      let ox,
+        oy,
+        x,
+        y,
+        distant,
+        loadLock = false;
+
+      // 触摸开始
+      function start(e) {
+        ox = e.touches[0].clientX;
+        oy = e.touches[0].clientY;
+      }
+      // 触摸移动过程中
+      function move(e) {
+        if (loadLock) return;
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+
+        mainDom.style = "";
+        distant = y - oy;
+
+        // 是否下拉行为
+        if (distant > 0) {
+          const deg =
+            (Math.atan(Math.abs(x - ox) / Math.abs(y - oy)) / Math.PI) * 180; // 下拉角度
+          if (deg > 40) {
+            [ox, oy] = [x, y];
+            return;
+          }
+        } else {
+          removeTouchEvent();
+          if (rootDocument.scrollTop === 0) addTouchEvent();
+          return;
+        }
+
+        let persent = (100 - distant * 0.5) / 100;
+        persent = persent > 0.5 ? persent : 0.5;
+        distant *= persent;
+        mainDom.style = `transform: translateY(${distant}px)`;
+
+        // 判断下拉距离是否足以触发下拉刷新， 是开启加载动画
+        if (distant > 20 && distant <= 50) {
+          dots[0].style = `transform: translateX(-${
+            ((distant - 20) * 2) / 3
+          }px)`;
+          dots[2].style = `transform: translateX(${
+            ((distant - 20) * 2) / 3
+          }px)`;
+        } else if (distant > 50) {
+          dots[0].style = `transform: translateX(-20px)`;
+          dots[2].style = `transform: translateX(20px)`;
+        }
+
+        e.preventDefault(); // 阻止默认行为以禁用橡皮筋/边界回弹效果
+      }
+
+      // 触摸结束
+      function end(e) {
+        if (loadLock) return;
+        // 可以触发下拉刷新
+        if (distant >= 50) {
+          dots[3].className = "dot loading";
+          mainDom.style = `transform: translateY(50px); transition: all 0.2s`;
+          onRefresh();
+          loadLock = true;
+        } else {
+          // 不可以触发下拉刷新，下拉距离不够，main元素返回顶部，同时取消加载动画
+          mainDom.style = "transition: all 0.2s";
+          dots[3].className = "dot";
+        }
+      }
+
+      // 添加监听触摸事件
+      function addTouchEvent() {
+        mainDom.addEventListener("touchstart", start, { passive: false });
+        mainDom.addEventListener("touchmove", move, { passive: false });
+        mainDom.addEventListener("touchend", end, { passive: false });
+      }
+
+      // 移除监听触摸事件
+      function removeTouchEvent() {
+        mainDom.removeEventListener("touchstart", start);
+        mainDom.removeEventListener("touchmove", move);
+        mainDom.removeEventListener("touchend", end);
+      }
+
+      // 页面初始化
+      // 模拟数据
+      const listBox = document.getElementsByClassName("list-box")[0];
+      let page = 1;
+      function onLoad() {
+        let productElements = page === 1 ? "" : listBox.innerHTML,
+          [start, end] =
+            page === 1 ? [0, 10] : [(page - 1) * 10, (page - 1) * 10 + 10];
+        for (let i = start; i < Math.min(products.length, end); i++) {
+          productElements += `
+          <div class="item">
+            <div class="img-box">
+              <img src="${products[i].img}">
+            </div>
+            <div class="product-info">
+              <div class="name ellipsis">${products[i].name}</div>
+              <div class="desc ellipsis">${products[i].desc}</div>
+              <div class="price">${products[i].price}</div>
+            </div>
+          </div>
+          `;
+        }
+        listBox.innerHTML = productElements;
+        loadMore.innerHTML =
+          products.length > end ? "上滑加载更多" : "暂无更多数据";
+        loadMore.className = "load-more";
+      }
+      onLoad();
+
+      // 模拟发起网络请求并刷新数据
+      function onRefresh() {
+        setTimeout(() => {
+          page = 1;
+          const numOfNewProducts = Math.floor(Math.random() * 6);
+          for (let i = 0; i < numOfNewProducts; i++) {
+            products.unshift(productAdd);
+          }
+
+          if (numOfNewProducts > 0) {
+            onLoad();
+            mainDom.style = "transition: all .2s";
+            const topTip = document.getElementsByClassName("top-tip")[0];
+            topTip.innerHTML = `更新了${numOfNewProducts}条数据`;
+            topTip.className = "top-tip show";
+            setTimeout(() => {
+              topTip.className = "top-tip";
+            }, 1500);
+          }
+          loadLock = false;
+        }, 2000);
+      }
+
+      // 加载更多数据
+      function onLoadMore() {
+        setTimeout(() => {
+          page++;
+          onLoad();
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
